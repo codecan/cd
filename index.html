@@ -1,67 +1,67 @@
 <iframe width="560" height="315" src="http://www.youtube.com/embed/ocIqmA1hf7s" frameborder="0" allowfullscreen></iframe>
+
+<h3>
+  Signup for a hosted chef account at <a href="http://www.opscode.com">www.opscode.com</a>
+</h3>
+
+<p>
+  Remember your username, password and organization.
+</p>
+
+<h3>
+  Download and double click on three files:
+</h3>
+
+<ul>
+  <li>Virtualbox from Oracle: <a href="https://www.virtualbox.org/wiki/Downloads">Virtualbox</a></li>
+  <li>Ubuntu Easybake Preview Image: <a href="https://opscode.box.com/shared/static/k45yhn5obdkrho5m2t00.ova">ubuntu-12.10-basybake-vm.ova</a></li>
+  <li>Windows Easybake Preview Image: <a href="https://opscode.box.com/shared/static/rr4syu54qsymerrwpgpd.ova">windows-2008-easybake-vm.ova</a></li>
+</ul>
+
+<h3>
+  Start a Virtualbox and run 'knife setup' and 'chef-client'
+</h3>
+
+
+<h4>Windows</h4>
 <pre>
-### Requirements
-
-Signup for a hosted chef account at http://manage.opscode.com
-Remember your username and password.
-
-## The following files may already be on this directory on your cd or usb
-Download virtualbox for your OS from http://virtualbox.org
-Download the ubuntu-12.10-basybake-vm from https://opscode.box.com/s/k45yhn5obdkrho5m2t00
-Download the windows-2008-easybake-vm from https://opscode.box.com/s/rr4syu54qsymerrwpgpd
-
-
-Double click on the Install of virtualbox for your OS selecting all the defaults.
-
-
-### Windows 2008r2
-
 Double click on the windows-2008-easybake-vm to import it into virtualbox, take all the defaults.
-
 In virtualbox, double click on your windows-2008-easybake-vm.
-
 On login, open a cmd or powershell and run 'knife setup' providing an organization name and your hosted chef user & pass.
-
 Run chef-client.
-
 Run 'shutdown -h -t 1'
+</pre>
 
-
-### Ubuntu 12.10
-
+<h4>Ubuntu</h4>
+<pre>
 Double click on the ubuntu-12.10-easybake-vm to import it into virtualbox, take all the defaults.
-
 In virtualbox, double click on your ubuntu-12.10-easybake-vm.
-
 On login, open a terminal and run 'sudo knife setup' providing an organization name and your hosted chef user & pass.
+Run 'sudo chef-client'.
+Run 'sudo poweroff'.
+</pre>
 
-Run ''sudo chef-client'.
+<h3>Clone as many nodes as you need</h3>
 
-Run ''sudo poweroff'.
-
-
-### The following steps caan be repeated to create many nodes as you want
-
-In the Virtualbox Manager window, select your not running my-easybake-vm and choose Machine->clone from the menu.
-
+<pre>
+In the Virtualbox Manager window, select a powereddown easybake-vm and choose Machine->clone from the menu.
 Select Reinitialize the MAC address of all network cards.
 Select Linked clone.
 
 Start your newly cloned vm, windows will restart once as we change the hostname.
-
 On login to new clone, run (w/ sudo on linux) chef-client within a terminal, cmd or powershell.
-
-
-
-### Gotchas
-
-We don't have a chef-repo yet, but git clone should work.
-
-We regenerate user and org keys by default, and copying the validator between windows/linux vms isn't automatic.
-
-Windows requires a reboot on first boot of new clone for hostname change.
-
-
-Goto manage.opscode.com and see all your windows  and linux nodes. 
-
 </pre>
+
+<h3>See your nodes on <a href="http://manage.opscode.com">manage.opscode.com</a></h3>
+
+<h4>Gotchas</h4>
+<ul>
+  <li>We don't have a chef-repo yet, but git clone should work.</li>
+  <li>We regenerate user and org keys by default, and copying the validator between windows/linux vms isn't automatic.
+</li>
+  <li>Windows requires a reboot on first boot of new clone for hostname change.
+</li>
+</ul>
+
+
+
