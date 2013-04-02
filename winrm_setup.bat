@@ -1,5 +1,7 @@
 @ECHO ON
 
+REM To use this from powershell on windows in a one liner:
+REM (New-Object System.Net.WebClient).DownloadFile('http://code.can.cd/winrm_setup.bat','winrm_setup.bat') ; .\winrm_setup.bat
 cmd.exe /c winrm quickconfig -q
 cmd.exe /c winrm quickconfig -transport:http
 cmd.exe /c winrm set winrm/config @{MaxTimeoutms="1800000"}
