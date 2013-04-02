@@ -1,68 +1,17 @@
-@ECHO OFF
+@ECHO ON
 
-IF "%1"=="-help" (
-  GOTO syntax
-)
-IF "%1"=="-h" (
-  GOTO syntax
-)
-IF "%1"=="-?" (
-  GOTO syntax
-)
+cmd.exe /c winrm quickconfig -q
+cmd.exe /c winrm quickconfig -transport:http
+cmd.exe /c winrm set winrm/config @{MaxTimeoutms="1800000"}
+cmd.exe /c winrm set winrm/config/winrs @{MaxMemoryPerShellMB="300"}
+cmd.exe /c winrm set winrm/config/service @{AllowUnencrypted="true"}
+cmd.exe /c winrm set winrm/config/service/auth @{Basic="true"}
+cmd.exe /c winrm set winrm/config/client/auth @{Basic="true"}
+cmd.exe /c winrm set winrm/config/listener?Address=*+Transport=HTTP @{Port="5985"}
+cmd.exe /c netsh advfirewall firewall set rule group="remote administration" new enable=yes 
+cmd.exe /c netsh firewall add portopening TCP 5985 "Port 5985" 
+cmd.exe /c net stop winrm 
+cmd.exe /c sc config winrm start= auto
+cmd.exe /c net start winrm 
 
-sc config WinRM start= delayed-auto
-sc start WinRM 
-
-IF NOT "%ERRORLEVEL%"=="0" ( 
-  IF NOT "%ERRORLEVEL%"=="1056" (
-    @ECHO Start WinRM failed with code %ERRORLEVEL%
-    GOTO error
-  ) 
-)  
-@ECHO Service already running is not a fatal error. Resuming execution. 
-
-IF NOT "%1"=="" (
-  IF NOT "%1"=="0" (
-    IF "%1"=="80" (
-      CALL winrm set winrm/config/service @{EnableCompatibilityHttpListener="true"} 2>&1 
-    ) ELSE (
-      CALL winrm create winrm/config/listener?Address=*+Transport=HTTP @{Port="%1"} 2>&1
-      IF ERRORLEVEL 1 (
-        CALL winrm set winrm/config/listener?Address=*+Transport=HTTP @{Port="%1"} 2>&1
-      )
-    )
-  )
-)
-
-IF ERRORLEVEL 1 ( 
-  @ECHO Enable WinRM HTTP Listener failed to execute!
-  GOTO error
-)
-
-IF NOT "%1"=="" (
-  IF NOT "%1"=="0" (
-    IF "%1"=="80" (
-      netsh advfirewall firewall set rule name="Windows Remote Management - Compatibility Mode (HTTP-In)" new enable=yes
-    ) ELSE (
-      netsh advfirewall firewall set rule name="Windows Remote Management (HTTP-In)" new localport=%1
-      netsh advfirewall firewall set rule name="Windows Remote Management (HTTP-In)" new enable=yes
-    )
-  )
-)
-
-IF ERRORLEVEL 1 ( 
-  @ECHO Enable WinRM firewall failed to execute!
-  GOTO error
-)
-
-GOTO end
-
-:syntax
-@ECHO Syntax: WinRMConfig.bat [port number]
-GOTO end
-
-:error
-GOTO end
-
-:end
 @ECHO Done.
